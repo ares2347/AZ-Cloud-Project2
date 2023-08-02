@@ -1,5 +1,6 @@
 import azure.functions as func
 import pymongo
+import requests
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
@@ -13,7 +14,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             collection = database['advertisements']
 
             rec_id1 = collection.insert_one(eval(request))
-
+            logic_app_url = "https://prod-91.eastus.logic.azure.com:443/workflows/c0c21e51dc1940849c07195cde9601be/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=RJATPSSxVg-Zp9hqQd4RuDmIh6Gy_w2mIlwMGKARafo"
+            response = requests.get(logic_app_url)
             return func.HttpResponse(req.get_body())
 
         except ValueError:
